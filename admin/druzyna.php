@@ -16,10 +16,13 @@ if (isset($_POST['action']) && $_POST['action'] === 'create') {
 		$Liga =  (int) $_POST['Liga'];
 		$Miejscowosc = $_POST['Miejscowosc'];
 
-		$Herb = $_FILES["Herb"]["name"];
+		$Herb = "";
 
-		if (!empty($Herb)) {
-			$file = $dir . basename($_FILES['Herb']['name']);
+		if (!empty($_FILES['Herb']['name'])) {
+			$fName = $_FILES['Herb']['name'];
+			$salt = md5($Nazwa.$Skrot.$Miejscowosc);
+			$Herb = basename($salt."_".$fName);
+			$file = $dir . $Herb;
 			move_uploaded_file($_FILES['Herb']['tmp_name'], $file);
 		}
 
@@ -140,6 +143,19 @@ if (isset($_GET['edit'])) {
 }
 $druzyna = $app->getAllDruzyna();
 ?>
+<form action="druzyna.php" method="POST" enctype="multipart/form-data">
+	<input type="hidden" name="ID" value="<?= isset($editDruzyna) ? $editDruzyna['ID'] : (isset($err) ?  $_POST['ID'] :  '') ?>" />
+	<input type="text" name="Nazwa" value="<?= isset($editDruzyna) ?  $editDruzyna['Nazwa'] : (isset($err) ?  $_POST['Nazwa'] : '') ?>" placeholder="Nazwa" />
+	<input type="text" name="Skrot" value="<?= isset($editDruzyna) ?  $editDruzyna['Skrot'] : (isset($err) ?  $_POST['Skrot'] : '')  ?>" placeholder="Skrot" />
+	<input type="file" name="Herb" accept=".png, .jpeg, .jpg"/>
+	<input type="text" name="Liga" value="<?= isset($editDruzyna) ? $editDruzyna['Liga'] : (isset($err) ?  $_POST['Liga'] : '')  ?>" placeholder="Liga" />
+	<input type="text" name="Miejscowosc" value="<?= isset($editDruzyna) ? $editDruzyna['Miejscowosc'] : (isset($err) ?  $_POST['Miejscowosc'] : '')?>" placeholder="Miejscowosc" />
+	<input type="hidden" name="action" value="<?= isset($editDruzyna) ? "edit" : 'create' ?>">
+	<input type="submit" value="<?= isset($editDruzyna) ? 'Edytuj' : 'Utwórz' ?> drużynę" />
+
+</form>
+<br /><a href="menu.php">Powrót</a>
+<hr>
 <table>
 	<tr>
 		<td>ID</td>
@@ -155,7 +171,7 @@ $druzyna = $app->getAllDruzyna();
 <td>' . $druzyna_['ID'] . '</td>
 <td>' . $druzyna_['Nazwa'] . '</td>
 <td>' . $druzyna_['Skrot'] . '</td>
-<td>' . ' <img width=64 src="/admin/img/'. $druzyna_['Herb'].'" '. '></td>
+<td>' . ' <img width=64 src="/admin/img/'. $druzyna_['Herb'].'" '. ' alt=" "></td>
 <td>' . $druzyna_['Liga'] . '</td>
 <td>' . $druzyna_['Miejscowosc'] . '</td>
 
@@ -164,17 +180,4 @@ $druzyna = $app->getAllDruzyna();
 	}
 	?>
 </table>
-<br /><a href="menu.php">Powrót</a>
-<hr>
-<form action="druzyna.php" method="POST" enctype="multipart/form-data">
-	<input type="hidden" name="ID" value="<?= isset($editDruzyna) ? $editDruzyna['ID'] : '' ?>" />
-	<input type="text" name="Nazwa" value="<?= isset($editDruzyna) ? $editDruzyna['Nazwa'] : '' ?>" placeholder="Nazwa" />
-	<input type="text" name="Skrot" value="<?= isset($editDruzyna) ? $editDruzyna['Skrot'] : '' ?>" placeholder="Skrot" />
-	<input type="file" name="Herb" accept=".png, .jpeg, .jpg"/>
-	<input type="text" name="Liga" value="<?= isset($editDruzyna) ? $editDruzyna['Liga'] : '' ?>" placeholder="Liga" />
-	<input type="text" name="Miejscowosc" value="<?= isset($editDruzyna) ? $editDruzyna['Miejscowosc'] : '' ?>" placeholder="Miejscowosc" />
-	<input type="hidden" name="action" value="<?= isset($editDruzyna) ? "edit" : 'create' ?>">
 
-	<input type="submit" value="<?= isset($editDruzyna) ? 'Edytuj' : 'Utwórz' ?> druzynę" />
-
-</form>
