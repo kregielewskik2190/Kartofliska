@@ -30,7 +30,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'create') {
 
 		if (!isset($Nazwa) || empty($Nazwa)) {
 			$err = true;
-			echo "Podaj nazwę klubu ";
+			echo "Podaj nazwę klubu\r\n";
 			echo "<br>";
 		}
 
@@ -81,10 +81,13 @@ if (isset($_POST['action']) && $_POST['action'] === 'edit') {
 		$Liga =  (int) $_POST['Liga'];
 		$Miejscowosc = $_POST['Miejscowosc'];
 
-		$Herb = $_FILES["Herb"]["name"];
+		$Herb = "";
 
-		if (!empty($Herb)) {
-			$file = $dir . basename($_FILES['Herb']['name']);
+		if (!empty($_FILES['Herb']['name'])) {
+			$fName = $_FILES['Herb']['name'];
+			$salt = md5($Nazwa.$Skrot.$Miejscowosc);
+			$Herb = basename($salt."_".$fName);
+			$file = $dir . $Herb;
 			move_uploaded_file($_FILES['Herb']['tmp_name'], $file);
 		}
 
@@ -92,7 +95,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'edit') {
 
 		if (!isset($Nazwa) || empty($Nazwa)) {
 			$err = true;
-			echo "Podaj nazwę klubu ";
+			echo "Podaj nazwę klubu\r\n";
 			echo "<br>";
 		}
 
@@ -171,7 +174,7 @@ $druzyna = $app->getAllDruzyna();
 <td>' . $druzyna_['ID'] . '</td>
 <td>' . $druzyna_['Nazwa'] . '</td>
 <td>' . $druzyna_['Skrot'] . '</td>
-<td>' . ' <img width=64 src="/admin/img/'. $druzyna_['Herb'].'" '. ' alt=" "></td>
+<td>' . ' <img width=64 src="/admin/img/'. $druzyna_['Herb'].'" '. ' alt=""></td>
 <td>' . $druzyna_['Liga'] . '</td>
 <td>' . $druzyna_['Miejscowosc'] . '</td>
 
