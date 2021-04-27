@@ -23,12 +23,13 @@ if ($_POST && isset($_POST['login'])) {
         'https://www.google.com/recaptcha/api/siteverify?secret=' . $recaptchaSecret . '&response=' . $_POST['g-recaptcha-response']
     );
     $responseData = json_decode($verifyResponse);
+	$captcha=$_POST['g-recaptcha-response'];
 
     if (empty($_POST["username"]) || empty($_POST["password"]) || empty($_POST["password2"])) {
         $error = 'Uzupełnij dane!';
     } else {
-        if (!isset($responseData->success)) {
-            $error = 'Zaznacz capcze';
+        if (!$captcha) {
+            $error = 'Uzupełnij captchę!';
         } elseif ($_POST["password"] != $_POST["password2"]) {
             $error = 'Hasła muszą być takie same';
         } elseif (strlen($_POST["password"]) < 8) {
