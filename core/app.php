@@ -112,7 +112,7 @@ class App {
 	}
 
 	public function getAllStadions() {
-		$stmt = $this->db->prepare('SELECT * from stadion');
+		$stmt = $this->db->prepare('SELECT * from stadion ORDER BY miejscowosc');
 		$stmt->execute();
 		return $stmt->fetchAll();
 	}
@@ -158,13 +158,13 @@ class App {
 		return (bool)$stmt->execute();
 	}
 	public function getAllDruzyna() {
-		$stmt = $this->db->prepare('SELECT * from druzyna');
+		$stmt = $this->db->prepare('SELECT * from druzyna ORDER BY Nazwa');
 		$stmt->execute();
 		return $stmt->fetchAll();
 	}
 
 	public function getAllNamesDruzyna() {
-		$stmt = $this->db->prepare('SELECT Nazwa from druzyna');
+		$stmt = $this->db->prepare('SELECT Nazwa from druzyna ORDER BY Nazwa');
 		$stmt->execute();
 		return $stmt->fetchAll();
 	}
@@ -241,19 +241,20 @@ class App {
 		return $stmt->fetch();
 	}
 
-	public function createSpotkania($liga, $druzynaA, $druzynaB, $data) {
-		$stmt = $this->db->prepare('INSERT INTO spotkania (liga, druzyna_a, druzyna_b, data) VALUES (:Liga, :DA, :DB, :Data)');
+	public function createSpotkania($liga, $druzynaA, $druzynaB, $data, $kolejka) {
+		$stmt = $this->db->prepare('INSERT INTO spotkania (liga, druzyna_a, druzyna_b, data, kolejka) VALUES (:Liga, :DA, :DB, :Data, :Kolejka)');
 
 		$stmt->bindValue(':Liga', $liga);
 		$stmt->bindValue(':DA', $druzynaA);
 		$stmt->bindValue(':DB', $druzynaB);
 		$stmt->bindValue(':Data', $data);
+		$stmt->bindValue(':Kolejka', $kolejka);
 
 		return (bool)$stmt->execute();
 	}
 
-	public function updateSpotkanie($ID, $druzynaA, $druzynaB, $data, $bramkiA, $bramkiB, $liga) {
-		$stmt = $this->db->prepare('UPDATE spotkania SET druzyna_a = :druzynaA, druzyna_b = :druzynaB, data = :data, bramkiA = :bramkiA, bramkiB = :bramkiB, liga = :liga WHERE ID = :ID');
+	public function updateSpotkanie($ID, $druzynaA, $druzynaB, $data, $bramkiA, $bramkiB, $liga, $kolejka) {
+		$stmt = $this->db->prepare('UPDATE spotkania SET druzyna_a = :druzynaA, druzyna_b = :druzynaB, data = :data, bramkiA = :bramkiA, bramkiB = :bramkiB, liga = :liga, kolejka = :kolejka WHERE ID = :ID');
 
 		$stmt->bindValue(':ID', $ID);
 		$stmt->bindValue(':liga', $liga);
@@ -262,6 +263,7 @@ class App {
 		$stmt->bindValue(':data', $data);
 		$stmt->bindValue(':bramkiA', $bramkiA);
 		$stmt->bindValue(':bramkiB', $bramkiB);
+		$stmt->bindValue(':kolejka', $kolejka);
 
 		return (bool)$stmt->execute();
 	}
