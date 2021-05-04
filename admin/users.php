@@ -14,6 +14,15 @@ if (isset($_GET['remove']) && $_GET['remove'] > 0 && $_GET['remove'] !== $user['
 }
 $users = $app->getAllUsers();
 ?>
+
+<form action="" method="POST">
+	<input type="text" name="name" />
+	<input type="password" name="password" />
+	<input type="hidden" name="action" value="create">
+	<input type="submit" value="Utwórz użytkownika" />
+</form>
+<br /><a href="menu.php">Powrót</a>
+<hr>
 <table>
 	<tr>
 		<td>Email</td>
@@ -30,11 +39,3 @@ $users = $app->getAllUsers();
 	}
 	?>
 </table>
-<br /><a href="menu.php">Powrót</a>
-<hr>
-<form action="" method="POST">
-	<input type="text" name="name" />
-	<input type="password" name="password" />
-	<input type="hidden" name="action" value="create">
-	<input type="submit" value="Utwórz użytkownika" />
-</form>
