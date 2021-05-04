@@ -30,7 +30,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'create') {
 
 		if (!isset($Nazwa) || empty($Nazwa)) {
 			$err = true;
-			echo "Podaj nazwę klubu\r\n";
+			echo "Podaj nazwę klubu ";
 			echo "<br>";
 		}
 
@@ -129,8 +129,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'edit') {
 			echo "<br>";
 		}
 
-		if (!$err)
+		if (!$err) {
 			$app->updateDruzyna($ID, $Nazwa, $Skrot, $Herb, $Liga, $Miejscowosc);
+			header('Location: druzyna.php');
+		}
 }
 
 if (isset($_GET['remove']) && $_GET['remove'] > 0 && $_GET['remove'] !== $druzyna['ID']) {
@@ -146,6 +148,7 @@ if (isset($_GET['edit'])) {
 }
 $druzyna = $app->getAllDruzyna();
 ?>
+
 <form action="druzyna.php" method="POST" enctype="multipart/form-data">
 	<input type="hidden" name="ID" value="<?= isset($editDruzyna) ? $editDruzyna['ID'] : (isset($err) ?  $_POST['ID'] :  '') ?>" />
 	<input type="text" name="Nazwa" value="<?= isset($editDruzyna) ?  $editDruzyna['Nazwa'] : (isset($err) ?  $_POST['Nazwa'] : '') ?>" placeholder="Nazwa" />
@@ -155,7 +158,6 @@ $druzyna = $app->getAllDruzyna();
 	<input type="text" name="Miejscowosc" value="<?= isset($editDruzyna) ? $editDruzyna['Miejscowosc'] : (isset($err) ?  $_POST['Miejscowosc'] : '')?>" placeholder="Miejscowosc" />
 	<input type="hidden" name="action" value="<?= isset($editDruzyna) ? "edit" : 'create' ?>">
 	<input type="submit" value="<?= isset($editDruzyna) ? 'Edytuj' : 'Utwórz' ?> drużynę" />
-
 </form>
 <br /><a href="menu.php">Powrót</a>
 <hr>
@@ -183,4 +185,3 @@ $druzyna = $app->getAllDruzyna();
 	}
 	?>
 </table>
-
