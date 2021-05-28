@@ -11,128 +11,129 @@ require_once('../core/bootstrap.php');
 
 
 if (isset($_POST['action']) && $_POST['action'] === 'create') {
-		$Nazwa = $_POST['Nazwa'];
-		$Skrot =  $_POST['Skrot'];
-		$Liga =  (int) $_POST['Liga'];
-		$Miejscowosc = $_POST['Miejscowosc'];
+	$Nazwa = $_POST['Nazwa'];
+	$Skrot =  $_POST['Skrot'];
+	$Liga =  (int) $_POST['Liga'];
+	$Miejscowosc = $_POST['Miejscowosc'];
 
-		$Herb = "";
+	$Herb = "";
 
-		if (!empty($_FILES['Herb']['name'])) {
-			$fName = $_FILES['Herb']['name'];
-			$salt = md5($Nazwa.$Skrot.$Miejscowosc);
-			$Herb = basename($salt."_".$fName);
-			$file = $dir . $Herb;
-			move_uploaded_file($_FILES['Herb']['tmp_name'], $file);
-		}
+	if (!empty($_FILES['Herb']['name'])) {
+		$fName = $_FILES['Herb']['name'];
+		$salt = md5($Nazwa.$Skrot.$Miejscowosc);
+		$Herb = basename($salt."_".$fName);
+		$file = $dir . $Herb;
+		move_uploaded_file($_FILES['Herb']['tmp_name'], $file);
+	}
 
-		$err = false;
+	$err = false;
 
-		if (!isset($Nazwa) || empty($Nazwa)) {
-			$err = true;
-			echo "Podaj nazwę klubu ";
-			echo "<br>";
-		}
+	if (!isset($Nazwa) || empty($Nazwa)) {
+		$err = true;
+		echo "Podaj nazwę klubu ";
+		echo "<br>";
+	}
 
-		if ((!isset($Skrot) || empty($Skrot))) {
-			$err = true;
-			echo "Podaj skrót nazwy klubu\r\n";
-			echo "<br>";
-		}
+	if ((!isset($Skrot) || empty($Skrot))) {
+		$err = true;
+		echo "Podaj skrót nazwy klubu\r\n";
+		echo "<br>";
+	}
 
-		if (isset($Skrot) && strlen($Skrot) > 3) {
-			$err = true;
-			echo "Skrót nazwy musi mieć max. 3 znak\r\n";
-			echo "<br>";
-		}
+	if (isset($Skrot) && strlen($Skrot) > 3) {
+		$err = true;
+		echo "Skrót nazwy musi mieć max. 3 znak\r\n";
+		echo "<br>";
+	}
 
-		if (!isset($Liga) || empty($Liga)) {
-			$err = true;
-			echo "Pole Liga jest puste \r\n ";
-			echo "<br>";
-		}
+	if (!isset($Liga) || empty($Liga)) {
+		$err = true;
+		echo "Pole Liga jest puste \r\n ";
+		echo "<br>";
+	}
 
-		if (isset($Liga) && !in_array($Liga, range(1,5)) ) {
-			$err = true;
-			echo "Wartość pola Liga jest podana nieprawidłowo\r\n";
-			echo "<br>";
-		}
+	if (isset($Liga) && !in_array($Liga, range(1, 5))) {
+		$err = true;
+		echo "Wartość pola Liga jest podana nieprawidłowo\r\n";
+		echo "<br>";
+	}
 
-				if (!isset($Miejscowosc) || empty($Miejscowosc)) {
-			$err = true;
-				echo "Podaj nazwę miejscowości \r\n ";
-			echo "<br>";
-		}
-		if (!$err)
-			$app->createDruzyna(
-				$Nazwa,
-				$Skrot,
-				$Herb,
-				$Liga,
-				$Miejscowosc
-			);
+	if (!isset($Miejscowosc) || empty($Miejscowosc)) {
+		$err = true;
+		echo "Podaj nazwę miejscowości \r\n ";
+		echo "<br>";
+	}
+	if (!$err) {
+		$app->createDruzyna($Nazwa, $Skrot, $Herb, $Liga, $Miejscowosc);
+		unset($err);
+	}
 }
+
 if (isset($_POST['action']) && $_POST['action'] === 'edit') {
 	$editDruzyna = $app->getDruzyna($_POST['ID']);
-	if (!$editDruzyna) return;
-		$ID = $_POST['ID'];
-		$Nazwa = $_POST['Nazwa'];
-		$Skrot =  $_POST['Skrot'];
-		$Liga =  (int) $_POST['Liga'];
-		$Miejscowosc = $_POST['Miejscowosc'];
+	if (!$editDruzyna) {
+		return;
+	}
+	$ID = $_POST['ID'];
+	$Nazwa = $_POST['Nazwa'];
+	$Skrot =  $_POST['Skrot'];
+	$Liga =  (int) $_POST['Liga'];
+	$Miejscowosc = $_POST['Miejscowosc'];
 
-		$Herb = "";
+	$Herb = "";
 
-		if (!empty($_FILES['Herb']['name'])) {
-			$fName = $_FILES['Herb']['name'];
-			$salt = md5($Nazwa.$Skrot.$Miejscowosc);
-			$Herb = basename($salt."_".$fName);
-			$file = $dir . $Herb;
-			move_uploaded_file($_FILES['Herb']['tmp_name'], $file);
-		}
+	if (!empty($_FILES['Herb']['name'])) {
+		$fName = $_FILES['Herb']['name'];
+		$salt = md5($Nazwa.$Skrot.$Miejscowosc);
+		$Herb = basename($salt."_".$fName);
+		$file = $dir . $Herb;
+		move_uploaded_file($_FILES['Herb']['tmp_name'], $file);
+	}
 
-		$err = false;
+	$err = false;
 
-		if (!isset($Nazwa) || empty($Nazwa)) {
-			$err = true;
-			echo "Podaj nazwę klubu\r\n";
-			echo "<br>";
-		}
+	if (!isset($Nazwa) || empty($Nazwa)) {
+		$err = true;
+		echo "Podaj nazwę klubu\r\n";
+		echo "<br>";
+	}
 
-		if ((!isset($Skrot) || empty($Skrot))) {
-			$err = true;
-			echo "Podaj skrót nazwy klubu\r\n";
-			echo "<br>";
-		}
+	if ((!isset($Skrot) || empty($Skrot))) {
+		$err = true;
+		echo "Podaj skrót nazwy klubu\r\n";
+		echo "<br>";
+	}
 
-		if (isset($Skrot) && strlen($Skrot) > 3) {
-			$err = true;
-			echo "Skrót nazwy musi mieć max. 3 znak\r\n";
-			echo "<br>";
-		}
+	if (isset($Skrot) && strlen($Skrot) > 3) {
+		$err = true;
+		echo "Skrót nazwy musi mieć max. 3 znak\r\n";
+		echo "<br>";
+	}
 
-		if (!isset($Liga) || empty($Liga)) {
-			$err = true;
-			echo "Pole Liga jest puste \r\n ";
-			echo "<br>";
-		}
+	if (!isset($Liga) || empty($Liga)) {
+		$err = true;
+		echo "Pole Liga jest puste \r\n ";
+		echo "<br>";
+	}
 
-		if (isset($Liga) && !in_array($Liga, range(1,5)) ) {
-			$err = true;
-			echo "Wartość pola Liga jest podana nieprawidłowo\r\n";
-			echo "<br>";
-		}
+	if (isset($Liga) && !in_array($Liga, range(1, 5))) {
+		$err = true;
+		echo "Wartość pola Liga jest podana nieprawidłowo\r\n";
+		echo "<br>";
+	}
 
-		if (!isset($Miejscowosc) || empty($Miejscowosc)) {
-			$err = true;
-				echo "Podaj nazwę miejscowości \r\n ";
-			echo "<br>";
-		}
+	if (!isset($Miejscowosc) || empty($Miejscowosc)) {
+		$err = true;
+		echo "Podaj nazwę miejscowości \r\n ";
+		echo "<br>";
+	}
 
-		if (!$err) {
-			$app->updateDruzyna($ID, $Nazwa, $Skrot, $Herb, $Liga, $Miejscowosc);
-			header('Location: druzyna.php');
-		}
+	if (!$err) {
+		$app->updateDruzyna($ID, $Nazwa, $Skrot, $Herb, $Liga, $Miejscowosc);
+		header('Location: druzyna.php');
+	}
+
+	unset($err);
 }
 
 if (isset($_GET['remove']) && $_GET['remove'] > 0 && $_GET['remove'] !== $druzyna['ID']) {
@@ -148,6 +149,11 @@ if (isset($_GET['edit'])) {
 }
 $druzyna = $app->getAllDruzyna();
 ?>
+
+<head>
+<link rel="icon" href="img/fevicon.png" type="image/gif"/>
+<title>Kartofliska</title>
+</head>
 
 <form action="druzyna.php" method="POST" enctype="multipart/form-data">
 	<input type="hidden" name="ID" value="<?= isset($editDruzyna) ? $editDruzyna['ID'] : (isset($err) ?  $_POST['ID'] :  '') ?>" />
@@ -185,3 +191,4 @@ $druzyna = $app->getAllDruzyna();
 	}
 	?>
 </table>
+
